@@ -7,19 +7,29 @@
 .phi(x, p, b)
 }
 \arguments{
-\item{x}{number in (0; 1): the point at which F() is calculated.}
+\item{x}{number in \eqn{(0; 1)}: the point at which the density is
+calculated.}
 
-\item{p}{number in (0; 1): initial heteroplasmy}
+\item{p}{number in \eqn{(0; 1)}: initial heteroplasmy.}
 
-\item{b}{number in (0; 1): time / rate parameter}
+\item{b}{number in \eqn{(0; 1)}: drift parameter.}
 }
 \value{
-The density of Kimura(p, d), evaluated at x.
+The density of \eqn{Kimura(p, b)}, evaluated at \eqn{x}.
 }
 \description{
-Estimates the probability density function at x for heteroplasmy under no
-selection pressure.
+Estimate the probability density function at \code{x} for heteroplasmy under
+no selection pressure.
 }
 \examples{
 .phi(0.2, 0.3, 0.5)
+}
+\references{
+Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+"The distribution of mitochondrial DNA heteroplasmy due to random genetic
+drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
+
+Kimura, Motoo. "Solution of a process of random genetic drift with a
+continuous model." Proceedings of the National Academy of Sciences of the
+United States of America 41.3 (1955): 144.
 }

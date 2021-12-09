@@ -2,22 +2,33 @@
 % Please edit documentation in R/kimura-distribution.R
 \name{.hypgeo}
 \alias{.hypgeo}
-\title{Estimate F(i-1, i+2, 2, x)}
+\title{Calculate \eqn{F(i-1, i+2, 2, x)}}
 \usage{
 .hypgeo(i, x)
 }
 \arguments{
-\item{i}{positive integer: the index in the infinite sum of the Kimura distribution.}
+\item{i}{positive integer.}
 
-\item{x}{number in (0; 1): the point at which F() is calculated.}
+\item{x}{number in \eqn{(0; 1)}: the point at which the function is
+calculated.}
 }
 \value{
-The value of F(i-1, i+2, 2, x), estimated recursively.
+The value of \eqn{F(i-1, i+2, 2, x)}, calculated recursively.
 }
 \description{
-Estimates the hypergeometric function F(i-1, i+2, 2, x) needed for
-calculating the Kimura distribution.
+Use Gauss' contiguous relations to calculate the hypergeometric function
+\eqn{F(i-1, i+2, 2, x)} needed for estimating the Kimura distribution.
 }
 \examples{
 .hypgeo(5, .3)
+}
+\references{
+Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+"The distribution of mitochondrial DNA heteroplasmy due to random genetic
+drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
+
+Hoang-Binh, D. "A program to compute exact hydrogenic radial integrals,
+oscillator strengths, and Einstein coefficients, for principal quantum
+numbers up to n≈ 1000." Computer Physics Communications 166.3 (2005):
+191-196.
 }

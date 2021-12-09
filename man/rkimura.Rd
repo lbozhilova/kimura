@@ -9,9 +9,9 @@ rkimura(n, p, b)
 \arguments{
 \item{n}{number of observations to generate.}
 
-\item{p}{number in (0; 1): initial heteroplasmy}
+\item{p}{number in \eqn{(0; 1)}: initial heteroplasmy.}
 
-\item{b}{number in (0; 1): time / rate parameter}
+\item{b}{number in \eqn{(0; 1)}: drift parameter.}
 }
 \value{
 A vector of length n.

@@ -7,16 +7,33 @@
 .f0(p, b)
 }
 \arguments{
-\item{p}{number in (0; 1): initial heteroplasmy}
+\item{p}{number in \eqn{(0; 1)}: initial heteroplasmy.}
 
-\item{b}{number in (0; 1): time / rate parameter}
+\item{b}{number in \eqn{(0; 1)}: drift parameter.}
 }
 \value{
 The probability the allele is lost due to genetic drift.
 }
 \description{
-Estimates the probability that an allele is lost due to random genetic drift.
+Estimate the probability that an allele is lost due to random genetic drift.
+}
+\details{
+The parameter \code{p} corresponds to the initial heteroplasmy, and
+therefore is also equal to the mean heteroplasmy after genetic drift.
+
+The parameter \code{b} corresponds to the amount of drift, and is equal to
+\code{b = exp(-t/N_eff)}, where \code{t} denotes time and \code{N_eff}
+denotes effective sample size.
 }
 \examples{
 .f0(0.3, 0.5)
+}
+\references{
+Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+"The distribution of mitochondrial DNA heteroplasmy due to random genetic
+drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
+
+Kimura, Motoo. "Solution of a process of random genetic drift with a
+continuous model." Proceedings of the National Academy of Sciences of the
+United States of America 41.3 (1955): 144.
 }

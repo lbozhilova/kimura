@@ -1,12 +1,22 @@
-#' Estimate F(i-1, i+2, 2, x)
+#' Calculate \eqn{F(i-1, i+2, 2, x)}
 #'
-#' Estimates the hypergeometric function F(i-1, i+2, 2, x) needed for
-#' calculating the Kimura distribution.
+#' Use Gauss' contiguous relations to calculate the hypergeometric function
+#' \eqn{F(i-1, i+2, 2, x)} needed for estimating the Kimura distribution.
 #'
-#' @param i positive integer: the index in the infinite sum of the Kimura distribution.
-#' @param x number in (0; 1): the point at which F() is calculated.
+#' @param i positive integer.
+#' @param x number in \eqn{(0; 1)}: the point at which the function is
+#'   calculated.
 #'
-#' @return The value of F(i-1, i+2, 2, x), estimated recursively.
+#' @return The value of \eqn{F(i-1, i+2, 2, x)}, calculated recursively.
+#'
+#' @references Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+#'   "The distribution of mitochondrial DNA heteroplasmy due to random genetic
+#'   drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
+#'
+#'   Hoang-Binh, D. "A program to compute exact hydrogenic radial integrals,
+#'   oscillator strengths, and Einstein coefficients, for principal quantum
+#'   numbers up to n≈ 1000." Computer Physics Communications 166.3 (2005):
+#'   191-196.
 #' @export
 #'
 #' @examples
@@ -33,12 +43,27 @@
 
 #' Probability of allele loss
 #'
-#' Estimates the probability that an allele is lost due to random genetic drift.
+#' Estimate the probability that an allele is lost due to random genetic drift.
 #'
-#' @param p number in (0; 1): initial heteroplasmy
-#' @param b number in (0; 1): time / rate parameter
+#' @param p number in \eqn{(0; 1)}: initial heteroplasmy.
+#' @param b number in \eqn{(0; 1)}: drift parameter.
+#'
+#' @details The parameter \code{p} corresponds to the initial heteroplasmy, and
+#'   therefore is also equal to the mean heteroplasmy after genetic drift.
+#'
+#'   The parameter \code{b} corresponds to the amount of drift, and is equal to
+#'   \code{b = exp(-t/N_eff)}, where \code{t} denotes time and \code{N_eff}
+#'   denotes effective sample size.
 #'
 #' @return The probability the allele is lost due to genetic drift.
+#'
+#' @references Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+#'   "The distribution of mitochondrial DNA heteroplasmy due to random genetic
+#'   drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
+#'
+#'   Kimura, Motoo. "Solution of a process of random genetic drift with a
+#'   continuous model." Proceedings of the National Academy of Sciences of the
+#'   United States of America 41.3 (1955): 144.
 #' @export
 #'
 #' @examples
@@ -54,22 +79,37 @@
   for (i in 2:N) {
     q_hg <- .hypgeo(i, q)
     sum_terms[i] <- q_hg * i_coef[i] * b_coef[i]
-    if (abs(sum_terms[i]-sum_terms[i-1]) < 1e-5)
+    if (abs(sum_terms[i]-sum_terms[i-1]) < 1e-4)
       break
   }
-  if(abs(sum_terms[N - 1] - sum_terms[N]) > 1e-5)
+  if(abs(sum_terms[N - 1] - sum_terms[N]) > 1e-4)
     warning("Series not yet converged at N = 250.")
   max(q + sum(sum_terms[1:i]), 0)
 }
 
 #' Probability of fixing allele
 #'
-#' Estimates the probability that an allele is fixed (i.e. the wildtype is lost)
+#' Estimate the probability that an allele is fixed (i.e. the wildtype is lost)
 #' due to random genetic drift.
 #'
 #' @inheritParams .f0
 #'
+#' @details The parameter \code{p} corresponds to the initial heteroplasmy, and
+#'   therefore is also equal to the mean heteroplasmy after genetic drift.
+#'
+#'   The parameter \code{b} corresponds to the amount of drift, and is equal to
+#'   \code{b = exp(-t/N_eff)}, where \code{t} denotes time and \code{N_eff}
+#'   denotes effective sample size.
+#'
 #' @return The probability the allele is fixed due to genetic drift.
+#'
+#' @references Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+#'   "The distribution of mitochondrial DNA heteroplasmy due to random genetic
+#'   drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
+#'
+#'   Kimura, Motoo. "Solution of a process of random genetic drift with a
+#'   continuous model." Proceedings of the National Academy of Sciences of the
+#'   United States of America 41.3 (1955): 144.
 #' @export
 #'
 #' @examples
@@ -85,23 +125,32 @@
   for (i in 2:N) {
     p_hg <- .hypgeo(i, p)
     sum_terms[i] <- p_hg * i_coef[i] * b_coef[i]
-    if (abs(sum_terms[i]-sum_terms[i-1]) < 1e-5)
+    if (abs(sum_terms[i]-sum_terms[i-1]) < 1e-4)
       break
   }
-  if(abs(sum_terms[N - 1] - sum_terms[N]) > 1e-5)
+  if(abs(sum_terms[N - 1] - sum_terms[N]) > 1e-4)
     warning("Series not yet converged at N = 250.")
   max(p + sum(sum_terms[1:i]), 0)
 }
 
 #' Density of the Kimura distribution
 #'
-#' Estimates the probability density function at x for heteroplasmy under no
-#' selection pressure.
+#' Estimate the probability density function at \code{x} for heteroplasmy under
+#' no selection pressure.
 #'
-#' @param x number in (0; 1): the point at which F() is calculated.
+#' @param x number in \eqn{(0; 1)}: the point at which the density is
+#'   calculated.
 #' @inheritParams .f0
 #'
-#' @return The density of Kimura(p, d), evaluated at x.
+#' @return The density of \eqn{Kimura(p, b)}, evaluated at \eqn{x}.
+#'
+#' @references Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+#'   "The distribution of mitochondrial DNA heteroplasmy due to random genetic
+#'   drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
+#'
+#'   Kimura, Motoo. "Solution of a process of random genetic drift with a
+#'   continuous model." Proceedings of the National Academy of Sciences of the
+#'   United States of America 41.3 (1955): 144.
 #' @export
 #'
 #' @examples
@@ -120,10 +169,10 @@
     p_hg <- .hypgeo(i, p)
     x_hg <- .hypgeo(i, x)
     sum_terms[i] <- p_hg * x_hg * i_coef[i] * b_coef[i]
-    if (abs(sum_terms[i]-sum_terms[i-1]) < 1e-5)
+    if (abs(sum_terms[i]-sum_terms[i-1]) < 1e-4)
       break
   }
-  if(abs(sum_terms[N - 1] - sum_terms[N]) > 1e-5)
+  if(abs(sum_terms[N - 1] - sum_terms[N]) > 1e-4)
     warning("Series not yet converged at N = 250.")
   max(sum(sum_terms[1:i]), 0)
 }

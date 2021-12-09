@@ -7,11 +7,12 @@
 dkimura(x, p, b)
 }
 \arguments{
-\item{x}{number in (0; 1): the point at which F() is calculated.}
+\item{x}{number in \eqn{(0; 1)}: the point at which the density is
+calculated.}
 
-\item{p}{number in (0; 1): initial heteroplasmy}
+\item{p}{number in \eqn{(0; 1)}: initial heteroplasmy.}
 
-\item{b}{number in (0; 1): time / rate parameter}
+\item{b}{number in \eqn{(0; 1)}: drift parameter.}
 }
 \value{
 The density of Kimura(p, d), evaluated at x. Note there is a fixed

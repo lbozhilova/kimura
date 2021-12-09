@@ -7,9 +7,9 @@
 pkimura_full(p, b)
 }
 \arguments{
-\item{p}{number in (0; 1): initial heteroplasmy}
+\item{p}{number in \eqn{(0; 1)}: initial heteroplasmy.}
 
-\item{b}{number in (0; 1): time / rate parameter}
+\item{b}{number in \eqn{(0; 1)}: drift parameter.}
 }
 \value{
 list of length 2, x and y
