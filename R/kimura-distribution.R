@@ -59,7 +59,7 @@
   }
   if(abs(sum_terms[N - 1] - sum_terms[N]) > 1e-5)
     warning("Series not yet converged at N = 250.")
-  q + sum(sum_terms[1:i])
+  max(q + sum(sum_terms[1:i]), 0)
 }
 
 #' Probability of fixing allele
@@ -90,7 +90,7 @@
   }
   if(abs(sum_terms[N - 1] - sum_terms[N]) > 1e-5)
     warning("Series not yet converged at N = 250.")
-  p + sum(sum_terms[1:i])
+  max(p + sum(sum_terms[1:i]), 0)
 }
 
 #' Density of the Kimura distribution
@@ -125,7 +125,7 @@
   }
   if(abs(sum_terms[N - 1] - sum_terms[N]) > 1e-5)
     warning("Series not yet converged at N = 250.")
-  sum(sum_terms[1:i])
+  max(sum(sum_terms[1:i]), 0)
 }
 
 #' The Kimura distribution
@@ -134,7 +134,8 @@
 #'
 #' @inheritParams .phi
 #'
-#' @return The density of Kimura(p, d), evaluated at x.
+#' @return The density of Kimura(p, d), evaluated at x. Note there is a fixed
+#'   probability at both extremes of the distribution.
 #' @export
 #'
 #' @examples
@@ -168,14 +169,14 @@ pkimura <- function(x, p, b) {
   if (x == 1)
     return(1)
   prob_loss <- .f0(p, b)
-  dst <- seq(1e-3, x, 1e-3)
+  dst <- seq(1e-4, x, 1e-4)
   if(dst[length(dst)] < x)
     dst <- c(dst, x)
   d <- length(dst)
   delta <- dst[d] - dst[d - 1]
   dst_y <- sapply(dst, function(x) .phi(x, p, b))
   prob_loss +
-    1e-3 * .5 * (sum(dst_y[1:(d-1)]) + sum(dst_y[2:(d-2)])) +
+    1e-4 * .5 * (sum(dst_y[1:(d-1)]) + sum(dst_y[2:(d-2)])) +
     delta * .5 * (dst_y[d-1] + dst_y[d])
 }
 
@@ -192,14 +193,14 @@ pkimura <- function(x, p, b) {
 #' @examples
 #' rkimura(10, 0.3, 0.5)
 rkimura <- function(n, p, b) {
-  dst_x <- seq(0, 1, 1e-3)
-  dst_y <- sapply(dst_x, function(x) dkimura(x, p, b))
-  spl <- sample(c(0, 0.5, 1),
-                n,
-                replace = TRUE,
+  x <- seq(0, 1, 1e-4)
+  pdf_x <- sapply(x, function(x) dkimura(x, p, b))
+  cdf_x <- cumsum(pdf_x * c(1, rep(1e-4, 10000)))
+  cdf_x[10001] <- 1
+  spl <- sample(c(0, 0.5, 1), n, replace = TRUE,
                 prob = c(.f0(p, b), 1 - .f0(p, b) - .f1(p, b), .f1(p, b)))
   idx <- which(spl == 0.5)
   m <- length(idx)
-  spl[idx] <- stats::approx(dst_y, dst_x, stats::runif(m))$y
+  spl[idx] <- stats::approx(cdf_x, x, stats::runif(m, min = cdf_x[1]))$y
   spl
 }

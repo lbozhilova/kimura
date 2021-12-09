@@ -1,4 +1,4 @@
-#' Estimate Kimura parameters
+#' Estimate Kimura distribution parameters
 #'
 #' Given a vector of heteroplasmies, estimated the Kimura distribution
 #' parameters.

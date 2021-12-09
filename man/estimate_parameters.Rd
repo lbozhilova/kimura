@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate-pars.R
 \name{estimate_parameters}
 \alias{estimate_parameters}
-\title{Estimate Kimura parameters}
+\title{Estimate Kimura distribution parameters}
 \usage{
 estimate_parameters(h)
 }

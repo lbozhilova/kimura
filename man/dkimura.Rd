@@ -14,7 +14,8 @@ dkimura(x, p, b)
 \item{b}{number in (0; 1): time / rate parameter}
 }
 \value{
-The density of Kimura(p, d), evaluated at x.
+The density of Kimura(p, d), evaluated at x. Note there is a fixed
+probability at both extremes of the distribution.
 }
 \description{
 Estimates the Kimura probability density function.
