@@ -17,3 +17,22 @@ estimate_parameters <- function(h) {
   c("p" = p, "b" = b)
 }
 
+#' The Kimura distribution
+#'
+#' Get complete CDF for Kimura(p, b).
+#'
+#' @inheritParams .phi
+#'
+#' @return list of length 2, x and y
+#' @export
+#'
+#' @examples
+#' pkimura_full(0.3, 0.5)
+pkimura_full <- function(p, b) {
+  x <- seq(0, 1, 1e-4)
+  pdf_x <- sapply(x, function(x) dkimura(x, p, b))
+  cdf_x <- cumsum(pdf_x * c(1, rep(1e-4, 10000)))
+  cdf_x[10001] <- 1
+  list("x" = x ,
+       "y" = cdf_x)
+}
