@@ -46,13 +46,20 @@
 .f0 <- function(p, b) {
   q <- 1 - p
   N <- 250
-  q_hg <- sapply(1:N, function(i) .hypgeo(i, q))
-  i_coef <- 2 * (1:N) + 1
-  b_coef <- sapply(1:N, function(i) b^choose(i + 1, 2))
-  sum_terms <- p * q * q_hg * i_coef * b_coef * c(-1, 1)
+  sum_terms <- numeric(N)
+  i_coef <- p * q * (2 * (1:N) + 1) * c(-1, 1)
+  b_coef <- b^choose(2:(N + 1), 2)
+  q_hg <- .hypgeo(1, q)
+  sum_terms[1] <- q_hg * i_coef[1] * b_coef[1]
+  for (i in 2:N) {
+    q_hg <- .hypgeo(i, q)
+    sum_terms[i] <- q_hg * i_coef[i] * b_coef[i]
+    if (abs(sum_terms[i]-sum_terms[i-1]) < 1e-5)
+      break
+  }
   if(abs(sum_terms[N - 1] - sum_terms[N]) > 1e-5)
     warning("Series not yet converged at N = 250.")
-  q + sum(sum_terms)
+  q + sum(sum_terms[1:i])
 }
 
 #' Probability of fixing allele
@@ -70,13 +77,20 @@
 .f1 <- function(p, b) {
   q <- 1 - p
   N <- 250
-  p_hg <- sapply(1:N, function(i) .hypgeo(i, p))
-  i_coef <- 2 * (1:N) + 1
-  b_coef <- sapply(1:N, function(i) b^choose(i + 1, 2))
-  sum_terms <- p * q * p_hg * i_coef * b_coef * c(-1, 1)
+  sum_terms <- numeric(N)
+  i_coef <- p * q * (2 * (1:N) + 1) * c(-1, 1)
+  b_coef <- b^choose(2:(N + 1), 2)
+  p_hg <- .hypgeo(1, p)
+  sum_terms[1] <- p_hg * i_coef[1] * b_coef[1]
+  for (i in 2:N) {
+    p_hg <- .hypgeo(i, p)
+    sum_terms[i] <- p_hg * i_coef[i] * b_coef[i]
+    if (abs(sum_terms[i]-sum_terms[i-1]) < 1e-5)
+      break
+  }
   if(abs(sum_terms[N - 1] - sum_terms[N]) > 1e-5)
     warning("Series not yet converged at N = 250.")
-  p + sum(sum_terms)
+  p + sum(sum_terms[1:i])
 }
 
 #' Density of the Kimura distribution
@@ -95,14 +109,23 @@
 .phi <- function(x, p, b) {
   q <- 1 - p
   N <- 250
-  x_hg <- sapply(1:N, function(i) .hypgeo(i, x))
-  p_hg <- sapply(1:N, function(i) .hypgeo(i, p))
+  sum_terms <- numeric(N)
   i_coef <- sapply(1:N, function(i) i * (i + 1) * (2 * i + 1))
-  b_coef <- sapply(1:N, function(i) b^choose(i + 1, 2))
-  sum_terms <- p * q * x_hg * p_hg * i_coef * b_coef
+  i_coef <- p * q * i_coef
+  b_coef <- b^choose(2:(N + 1), 2)
+  x_hg <- .hypgeo(1, x)
+  p_hg <- .hypgeo(1, p)
+  sum_terms[1] <- p_hg * x_hg * i_coef[1] * b_coef[1]
+  for (i in 2:N) {
+    p_hg <- .hypgeo(i, p)
+    x_hg <- .hypgeo(i, x)
+    sum_terms[i] <- p_hg * x_hg * i_coef[i] * b_coef[i]
+    if (abs(sum_terms[i]-sum_terms[i-1]) < 1e-5)
+      break
+  }
   if(abs(sum_terms[N - 1] - sum_terms[N]) > 1e-5)
     warning("Series not yet converged at N = 250.")
-  sum(sum_terms)
+  sum(sum_terms[1:i])
 }
 
 #' The Kimura distribution
