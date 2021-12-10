@@ -179,73 +179,129 @@
 
 #' The Kimura distribution
 #'
-#' Estimates the Kimura probability density function.
+#' Estimate the \eqn{Kimura(p, b)} probability density function.
 #'
+#' @param x numeric vector of values in \eqn{[0; 1]}.
 #' @inheritParams .phi
 #'
-#' @return The density of Kimura(p, d), evaluated at x. Note there is a fixed
-#'   probability at both extremes of the distribution.
+#' @return The density of \eqn{Kimura(p, b)}, evaluated at \code{x}. Note there
+#'   is a fixed probability at both extremes of the distribution.
+#'
+#' @references Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+#'   "The distribution of mitochondrial DNA heteroplasmy due to random genetic
+#'   drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
+#'
+#'   Kimura, Motoo. "Solution of a process of random genetic drift with a
+#'   continuous model." Proceedings of the National Academy of Sciences of the
+#'   United States of America 41.3 (1955): 144.
 #' @export
 #'
 #' @examples
-#' dkimura(0, 0.3, 0.5)
-#' dkimura(0.2, 0.3, 0.5)
-#' dkimura(1, 0.3, 0.5)
+#' dkimura(c(0, 0.2, 0.3), 0.3, 0.5)
 dkimura <- function(x, p, b) {
-  if (x == 0)
-    return(.f0(p, b))
-  if (x == 1)
-    return(.f1(p, b))
-  .phi(x, p, b)
+  y <- numeric(length(x))
+  y[x == 0] <- .f0(p, b)
+  y[x == 1] <- .f1(p, b)
+  z <- x[x > 0 & x < 1]
+  lz <- length(z)
+  if (lz == 0)
+    return(y)
+  q <- 1 - p
+  N <- 250
+  sum_terms <- matrix(0, ncol = lz, nrow = N)
+  i_coef <- sapply(1:N, function(i) i * (i + 1) * (2 * i + 1))
+  i_coef <- p * q * i_coef
+  b_coef <- b^choose(2:(N + 1), 2)
+  p_hg <- .hypgeo(1, p)
+  z_hg <- sapply(z, function(x) .hypgeo(1, x))
+  sum_terms[1, ] <- p_hg * z_hg * i_coef[1] * b_coef[1]
+  j <- 1:lz
+  for (i in 2:N) {
+    z_hg <- sapply(z[j], function(x) .hypgeo(i, x))
+    p_hg <- .hypgeo(i, p)
+    sum_terms[i, j] <- p_hg * z_hg * i_coef[i] * b_coef[i]
+    done_idx <- abs(sum_terms[i-1, j] - sum_terms[i, j]) < 1e-4
+    j <- j[!done_idx]
+    if (length(j) == 0)
+      break
+  }
+  if(any(abs(sum_terms[N - 1, ] - sum_terms[N, ]) > 1e-4))
+    warning("Series not yet converged at N = 250.")
+  y[x > 0 & x < 1] <- colSums(sum_terms)
+  y[y < 0] <- 0
+  y
 }
 
 #' The Kimura distribution
 #'
-#' Estimates the Kimura cumulative distribution function.
+#' Estimate the \eqn{Kimura(p, b)} cumulative distribution function.
 #'
-#' @inheritParams .phi
+#' @inheritParams dkimura
 #'
-#' @return The CDF of Kimura(p, d), evaluated at x.
+#' @return The cumulative distribution function of \eqn{Kimura(p, b)}, evaluated
+#'   at \code{x}. Note there is a fixed probability at both extremes of the
+#'   distribution. the distribution is estimated by evaluating \code{dkimura(p,
+#'   b)} at regular intervals of length \code{1e-4} and applying the trapezoidal
+#'   rule.
+#'
+#' @references Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+#'   "The distribution of mitochondrial DNA heteroplasmy due to random genetic
+#'   drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
 #' @export
 #'
 #' @examples
-#' pkimura(0, 0.3, 0.5)
-#' pkimura(0.2, 0.3, 0.5)
-#' pkimura(1, 0.3, 0.5)
+#' pkimura(c(0, 0.2, 0.3), 0.3, 0.5)
 pkimura <- function(x, p, b) {
-  if (x == 0)
-    return(.f0(p, b))
-  if (x == 1)
-    return(1)
-  prob_loss <- .f0(p, b)
-  dst <- seq(1e-4, x, 1e-4)
-  if(dst[length(dst)] < x)
-    dst <- c(dst, x)
-  d <- length(dst)
-  delta <- dst[d] - dst[d - 1]
-  dst_y <- sapply(dst, function(x) .phi(x, p, b))
-  prob_loss +
-    1e-4 * .5 * (sum(dst_y[1:(d-1)]) + sum(dst_y[2:(d-2)])) +
-    delta * .5 * (dst_y[d-1] + dst_y[d])
+  y <- numeric(length(x))
+  y[x < 0] <- 0
+  y[x == 0] <- .f0(p, b)
+  y[x >= 1] <- 1
+  z <- x[x > 0 & x < 1]
+  lz <- length(z)
+  if (lz == 0)
+    return(y)
+  density_z <- dkimura(z, p, b)
+  k <- seq(1e-4, max(z) + 1e-4, 1e-4)
+  density_k <- dkimura(k, p, b)
+  cdf_k <- .pkimura_full(p, b)[-c(1, 10001)]
+  get_cdf <- function(ix) {
+    x <- z[ix]
+    ik <- floor(x * 1e4)
+    if(ik == 0)
+      return(.f0(p, b) + 0.5 * x * density_z[ix])
+    if((ik+1) == 1e4) {
+      d <- 1 - x
+      return(1 - .f1(p, b) - 0.5 * d * density_z[ix])
+    }
+    d <- x - k[ik]
+    cdf_k[ik] + 0.5 * d * (density_k[ik] + density_z[ix])
+  }
+  y[x > 0 & x < 1] <- sapply(1:length(z), get_cdf)
+  y
 }
 
 #' The Kimura distribution
 #'
-#' Generates from the Kimura distribution.
+#' Generate random samples from the \eqn{Kimura(p, b)} distribution.
 #'
 #' @param n number of observations to generate.
 #' @inheritParams .phi
 #'
-#' @return A vector of length n.
+#' @return A vector of length \code{n} of heteroplasmy fractions generated from
+#'   the \eqn{Kimura(p, b)} distribution. Note that while most real-life
+#'   heteroplasmy fraction data is rounded to 2 significant digits, these
+#'   randomly generated values are not.
+#'
+#' @references Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+#'   "The distribution of mitochondrial DNA heteroplasmy due to random genetic
+#'   drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
 #' @export
 #'
 #' @examples
 #' rkimura(10, 0.3, 0.5)
 rkimura <- function(n, p, b) {
   x <- seq(0, 1, 1e-4)
-  pdf_x <- sapply(x, function(x) dkimura(x, p, b))
-  cdf_x <- cumsum(pdf_x * c(1, rep(1e-4, 10000)))
-  cdf_x[10001] <- 1
+  cdf_x <- .pkimura_full(p, b)
   spl <- sample(c(0, 0.5, 1), n, replace = TRUE,
                 prob = c(.f0(p, b), 1 - .f0(p, b) - .f1(p, b), .f1(p, b)))
   idx <- which(spl == 0.5)

@@ -1,7 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-\*\* NOTE: This is an untested and undocumented toy reimplementation.
+\*\* NOTE: This is an untested and poorly documented toy
+reimplementation of
+[lbozhilova/Kimura-Distribution)](https://github.com/lbozhilova/Kimura-Distribution).
 \*\*
 
 # kimura
@@ -9,12 +11,12 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of kimura is to fit a Kimura dsitribution to heteroplasmy data
+The goal of `kimura` is to fit Kimura dsitributions to heteroplasmy data
 and test for evidence of selection pressure.
 
 ## Installation
 
-You can install the development version of kimura from
+You can install the development version of `kimura` from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -24,36 +26,57 @@ devtools::install_github("lbozhilova/kimura")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+The principal purpose of this package is to perform hypothesis test for
+the presence of selection pressure in mtDNA heteroplasmy distributions
+(Wonnapinij et al., 2008). This can be done like so:
 
 ``` r
 library(kimura)
-## basic example code
+
+# Load some heteroplasmy data
+h <- c(0.06, 0.08, 0.27, 0.37, 0.40, 0.45, 0.56, 0.61, 0.75, 0.79)
+
+# Carry out test for selection 
+test_kimura(h)
+#> 
+#>  Monte Carlo Kolmogorov-Smirnov
+#> 
+#> data:  h and Kimura(0.434, 0.7417)
+#> D = 0.12798, p = 0.43400, b = 0.74170, p-value = 0.992
+#> alternative hypothesis: one-sided
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+There is also some additional functionality for generating data from the
+Kimura distirbution.
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+# Initialise Kimura parameters
+p <- 0.3250
+b <- 0.01257
+
+# Probability of allele loss
+dkimura(0, p, b)
+#> [1] 0.6667266
+# Probability of fixing an allele
+dkimura(1, p, b)
+#> [1] 0.3167281
+
+# Kimura(p, d) CDF at 0.1 intervals
+pkimura(seq(0, 1, 0.1), p, b)
+#>  [1] 0.6667266 0.6683807 0.6700356 0.6716903 0.6733450 0.6749996 0.6766540
+#>  [8] 0.6783084 0.6799627 0.6816169 1.0000000
+
+# Random number generation
+rkimura(10, p, b)
+#>  [1] 0 1 1 1 0 0 1 0 0 1
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/v1/examples>.
+## References
 
-You can also embed plots, for example:
+Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels. “The
+distribution of mitochondrial DNA heteroplasmy due to random genetic
+drift.” The American Journal of Human Genetics 83.5 (2008): 582-593.
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+Kimura, Motoo. “Solution of a process of random genetic drift with a
+continuous model.” Proceedings of the National Academy of Sciences of
+the United States of America 41.3 (1955): 144.

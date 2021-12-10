@@ -14,11 +14,19 @@ rkimura(n, p, b)
 \item{b}{number in \eqn{(0; 1)}: drift parameter.}
 }
 \value{
-A vector of length n.
+A vector of length \code{n} of heteroplasmy fractions generated from
+the \eqn{Kimura(p, b)} distribution. Note that while most real-life
+heteroplasmy fraction data is rounded to 2 significant digits, these
+randomly generated values are not.
 }
 \description{
-Generates from the Kimura distribution.
+Generate random samples from the \eqn{Kimura(p, b)} distribution.
 }
 \examples{
 rkimura(10, 0.3, 0.5)
+}
+\references{
+Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+"The distribution of mitochondrial DNA heteroplasmy due to random genetic
+drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
 }

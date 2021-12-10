@@ -7,13 +7,15 @@
 estimate_parameters(h)
 }
 \arguments{
-\item{h}{numeric: heteroplasmy fractions}
+\item{h}{numeric vector in \eqn{[0; 1]} of heteroplasmy fractions.}
 }
 \value{
-A named vector of length two.
+A named vector of length two with elements \code{p} and \code{b}.
+These are the estimated parameters of a \eqn{Kimura(p, b)} distribution to
+fit to the data.
 }
 \description{
-Given a vector of heteroplasmies, estimated the Kimura distribution
+Given a vector of heteroplasmy fractions, estimate the Kimura distribution
 parameters.
 }
 \examples{

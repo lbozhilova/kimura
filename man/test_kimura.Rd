@@ -2,22 +2,24 @@
 % Please edit documentation in R/drift.R
 \name{test_kimura}
 \alias{test_kimura}
-\title{Monte Carlo KS test for genetic drift}
+\title{Monte Carlo Kolmogorov-Smirnov test for genetic drift}
 \usage{
 test_kimura(h, num_MC = 1000, round = TRUE)
 }
 \arguments{
-\item{h}{heteroplasmy}
+\item{h}{numeric vector in \eqn{[0; 1]} of heteroplasmy fractions.}
 
-\item{num_MC}{number MC simulations}
+\item{num_MC}{number of Monte Carlo simulations.}
 
-\item{round}{whether the het is rounded}
+\item{round}{logical, indicates whether heteroplasmy fractions are rounded to
+two significant digits.}
 }
 \value{
 object of class htest
 }
 \description{
-Monte Carlo KS test for genetic drift
+Given  heteroplasmy fractions \code{h}, test whether their distribution is
+consistent with random genetic drift.
 }
 \examples{
 h <- seq(0.2, 0.5, 0.01)

@@ -7,21 +7,27 @@
 pkimura(x, p, b)
 }
 \arguments{
-\item{x}{number in \eqn{(0; 1)}: the point at which the density is
-calculated.}
+\item{x}{numeric vector of values in \eqn{[0; 1]}.}
 
 \item{p}{number in \eqn{(0; 1)}: initial heteroplasmy.}
 
 \item{b}{number in \eqn{(0; 1)}: drift parameter.}
 }
 \value{
-The CDF of Kimura(p, d), evaluated at x.
+The cumulative distribution function of \eqn{Kimura(p, b)}, evaluated
+at \code{x}. Note there is a fixed probability at both extremes of the
+distribution. the distribution is estimated by evaluating \code{dkimura(p,
+  b)} at regular intervals of length \code{1e-4} and applying the trapezoidal
+rule.
 }
 \description{
-Estimates the Kimura cumulative distribution function.
+Estimate the \eqn{Kimura(p, b)} cumulative distribution function.
 }
 \examples{
-pkimura(0, 0.3, 0.5)
-pkimura(0.2, 0.3, 0.5)
-pkimura(1, 0.3, 0.5)
+pkimura(c(0, 0.2, 0.3), 0.3, 0.5)
+}
+\references{
+Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+"The distribution of mitochondrial DNA heteroplasmy due to random genetic
+drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
 }

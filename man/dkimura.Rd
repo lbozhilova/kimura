@@ -7,22 +7,28 @@
 dkimura(x, p, b)
 }
 \arguments{
-\item{x}{number in \eqn{(0; 1)}: the point at which the density is
-calculated.}
+\item{x}{numeric vector of values in \eqn{[0; 1]}.}
 
 \item{p}{number in \eqn{(0; 1)}: initial heteroplasmy.}
 
 \item{b}{number in \eqn{(0; 1)}: drift parameter.}
 }
 \value{
-The density of Kimura(p, d), evaluated at x. Note there is a fixed
-probability at both extremes of the distribution.
+The density of \eqn{Kimura(p, b)}, evaluated at \code{x}. Note there
+is a fixed probability at both extremes of the distribution.
 }
 \description{
-Estimates the Kimura probability density function.
+Estimate the \eqn{Kimura(p, b)} probability density function.
 }
 \examples{
-dkimura(0, 0.3, 0.5)
-dkimura(0.2, 0.3, 0.5)
-dkimura(1, 0.3, 0.5)
+dkimura(c(0, 0.2, 0.3), 0.3, 0.5)
+}
+\references{
+Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels.
+"The distribution of mitochondrial DNA heteroplasmy due to random genetic
+drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
+
+Kimura, Motoo. "Solution of a process of random genetic drift with a
+continuous model." Proceedings of the National Academy of Sciences of the
+United States of America 41.3 (1955): 144.
 }
