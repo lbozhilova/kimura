@@ -13,14 +13,14 @@ knitr::opts_chunk$set(
 )
 ```
 ** NOTE: This is an untested and poorly documented toy reimplementation of 
-[lbozhilova/Kimura-Distribution)](https://github.com/lbozhilova/Kimura-Distribution). **
+[lbozhilova/Kimura-Distribution](https://github.com/lbozhilova/Kimura-Distribution).**
 
 # kimura
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of `kimura` is to fit Kimura dsitributions to heteroplasmy data and 
+The goal of `kimura` is to fit Kimura distributions to heteroplasmy data and 
 test for evidence of selection pressure.
 
 ## Installation
@@ -29,6 +29,7 @@ You can install the development version of `kimura` from [GitHub](https://github
 
 ``` r
 # install.packages("devtools")
+library("devtools")
 devtools::install_github("lbozhilova/kimura")
 ```
 
@@ -47,7 +48,7 @@ h <- c(0.06, 0.08, 0.27, 0.37, 0.40, 0.45, 0.56, 0.61, 0.75, 0.79)
 test_kimura(h)
 ```
 
-There is also some additional functionality for generating data from the Kimura distirbution.
+There is also some additional functionality for generating data from the Kimura distribution.
 
 ```{r example2, warning=FALSE}
 # Initialise Kimura parameters

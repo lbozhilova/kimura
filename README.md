@@ -3,15 +3,14 @@
 
 \*\* NOTE: This is an untested and poorly documented toy
 reimplementation of
-[lbozhilova/Kimura-Distribution)](https://github.com/lbozhilova/Kimura-Distribution).
-\*\*
+[lbozhilova/Kimura-Distribution](https://github.com/lbozhilova/Kimura-Distribution).\*\*
 
 # kimura
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of `kimura` is to fit Kimura dsitributions to heteroplasmy data
+The goal of `kimura` is to fit Kimura distributions to heteroplasmy data
 and test for evidence of selection pressure.
 
 ## Installation
@@ -21,6 +20,7 @@ You can install the development version of `kimura` from
 
 ``` r
 # install.packages("devtools")
+library("devtools")
 devtools::install_github("lbozhilova/kimura")
 ```
 
@@ -42,12 +42,12 @@ test_kimura(h)
 #>  Monte Carlo Kolmogorov-Smirnov
 #> 
 #> data:  h and Kimura(0.434, 0.7417)
-#> D = 0.12798, p = 0.43400, b = 0.74170, p-value = 0.992
+#> D = 0.12798, p = 0.43400, b = 0.74170, p-value = 0.99
 #> alternative hypothesis: one-sided
 ```
 
 There is also some additional functionality for generating data from the
-Kimura distirbution.
+Kimura distribution.
 
 ``` r
 # Initialise Kimura parameters
@@ -68,7 +68,7 @@ pkimura(seq(0, 1, 0.1), p, b)
 
 # Random number generation
 rkimura(10, p, b)
-#>  [1] 0 1 1 1 0 0 1 0 0 1
+#>  [1] 0 0 1 0 1 1 0 0 1 1
 ```
 
 ## References
