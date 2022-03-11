@@ -199,6 +199,10 @@
 #' @examples
 #' dkimura(c(0, 0.2, 0.3), 0.3, 0.5)
 dkimura <- function(x, p, b) {
+  if (b == 0)
+    return(stats::dbinom(x, 1, p))
+  if (b == 1)
+    return(1 * x == p)
   y <- numeric(length(x))
   y[x == 0] <- .f0(p, b)
   y[x == 1] <- .f1(p, b)
@@ -252,6 +256,10 @@ dkimura <- function(x, p, b) {
 #' @examples
 #' pkimura(c(0, 0.2, 0.3), 0.3, 0.5)
 pkimura <- function(x, p, b) {
+  if (b == 0)
+    return(stats::pbinom(x, 1, p))
+  if (b == 1)
+    return(1 * (x >= p))
   y <- numeric(length(x))
   y[x < 0] <- 0
   y[x == 0] <- .f0(p, b)
@@ -300,6 +308,10 @@ pkimura <- function(x, p, b) {
 #' @examples
 #' rkimura(10, 0.3, 0.5)
 rkimura <- function(n, p, b) {
+  if (b == 0)
+    return(stats::rbinom(n, 1, p))
+  if (b == 1)
+    return(rep(p, n))
   x <- seq(0, 1, 1e-4)
   cdf_x <- .pkimura_full(p, b)
   spl <- sample(c(0, 0.5, 1), n, replace = TRUE,

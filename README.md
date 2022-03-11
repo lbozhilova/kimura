@@ -42,7 +42,7 @@ test_kimura(h)
 #>  Monte Carlo Kolmogorov-Smirnov
 #> 
 #> data:  h and Kimura(0.434, 0.7417)
-#> D = 0.12798, p = 0.43400, b = 0.74170, p-value = 0.99
+#> D = 0.12798, p = 0.43400, b = 0.74170, p-value = 0.991
 #> alternative hypothesis: one-sided
 ```
 
@@ -51,24 +51,26 @@ Kimura distribution.
 
 ``` r
 # Initialise Kimura parameters
-p <- 0.3250
-b <- 0.01257
+p <- 0.6
+b <- 0.95
 
 # Probability of allele loss
 dkimura(0, p, b)
-#> [1] 0.6667266
+#> [1] 1.989732e-05
 # Probability of fixing an allele
 dkimura(1, p, b)
-#> [1] 0.3167281
+#> [1] 9.694172e-06
 
 # Kimura(p, d) CDF at 0.1 intervals
 pkimura(seq(0, 1, 0.1), p, b)
-#>  [1] 0.6667266 0.6683807 0.6700356 0.6716903 0.6733450 0.6749996 0.6766540
-#>  [8] 0.6783084 0.6799627 0.6816169 1.0000000
+#>  [1] 1.989732e-05 2.165073e-05 1.345668e-04 3.560559e-03 3.773170e-02
+#>  [6] 1.840206e-01 4.908528e-01 8.136989e-01 9.711726e-01 9.989777e-01
+#> [11] 1.000000e+00
 
 # Random number generation
 rkimura(10, p, b)
-#>  [1] 0 0 1 0 1 1 0 0 1 1
+#>  [1] 0.7022604 0.6391005 0.5597187 0.5749873 0.7201949 0.6307230 0.5723443
+#>  [8] 0.6263145 0.7428140 0.7362410
 ```
 
 ## References

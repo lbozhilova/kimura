@@ -52,8 +52,8 @@ There is also some additional functionality for generating data from the Kimura 
 
 ```{r example2, warning=FALSE}
 # Initialise Kimura parameters
-p <- 0.3250
-b <- 0.01257
+p <- 0.6
+b <- 0.95
 
 # Probability of allele loss
 dkimura(0, p, b)
