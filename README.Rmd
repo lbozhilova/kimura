@@ -12,8 +12,6 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-** NOTE: This is an untested and poorly documented toy reimplementation of 
-[lbozhilova/Kimura-Distribution](https://github.com/lbozhilova/Kimura-Distribution).**
 
 # kimura
 
@@ -72,3 +70,5 @@ rkimura(10, p, b)
 Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels. "The distribution of mitochondrial DNA heteroplasmy due to random genetic drift." The American Journal of Human Genetics 83.5 (2008): 582-593.
 
 Kimura, Motoo. "Solution of a process of random genetic drift with a continuous model." Proceedings of the National Academy of Sciences of the United States of America 41.3 (1955): 144.
+
+This package started out as a toy reimplementation of [lbozhilova/Kimura-Distribution](https://github.com/lbozhilova/Kimura-Distribution).
