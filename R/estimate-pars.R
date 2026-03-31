@@ -14,6 +14,7 @@
 #' h = stats::runif(10)
 #' estimate_parameters(h)
 estimate_parameters <- function(h) {
+  message("Warning -- don't use these parameters to do a Kolmogorov-Smirnov fit for selection! They will not generally give the best-fitting distribution (see doi.org/10.1093/g3journal/jkad068)")
   p <- mean(h)
   b <- 1 - stats::var(h) / (p * (1 - p))
   c("p" = p, "b" = b)
