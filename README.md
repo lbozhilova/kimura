@@ -59,11 +59,11 @@ the fitted distribution (Wonnapinij et al., 2008).
 method-of-moments fit does not provide the best-fitting version of the Kimura
 distribution for a given heteroplasmy sample. Such a fit will often 
 produce a distribution that is a bad fit to the data, and therefore a 
-false positive signal of selection, whereas a differently fitted 
+*false positive signal of selection*, whereas a differently fitted 
 distribution would given no such signal. This issue is described in
 (Giannakis et al., 2023).
 
-❗ It is not recommended to assess selection by fitting a Kimura distribution to
+❗ It is *not recommended* to assess selection by fitting a Kimura distribution to
 snapshot heteroplasmy data -- time series data is more appropriate for this 
 task. This repository https://github.com/StochasticBiology/heteroplasmy-analysis/
 contains functions to identify better Kimura fits than method of moments.
