@@ -8,6 +8,8 @@
 
 The goal of `kimura` is to provide functionality related to the Kimura distribution from statistical genetics (Kimura, 1955), often applied to the study of mitochondrial DNA heteroplasmy.
 
+❗ If you are looking to fit a Kimura distribution to a heteroplasmy sample to provide evidence of selection (or neutrality), please read the notes below and Giannakis et al. (2023) ❗
+
 ## Installation
 
 You can install the development version of `kimura` from
@@ -55,13 +57,13 @@ been used to carry out
 a Kolmogorov-Smirnov test to assess discrepancy between the sample and 
 the fitted distribution (Wonnapinij et al., 2008). 
 
-❗ However, since (Wonnapinij et al., 2008), it has been found that a 
+❗ However, since Wonnapinij et al. (2008), it has been found that a 
 method-of-moments fit does not provide the best-fitting version of the Kimura
 distribution for a given heteroplasmy sample. Such a fit will often 
 produce a distribution that is a bad fit to the data, and therefore a 
 *false positive signal of selection*, whereas a differently fitted 
 distribution would given no such signal. This issue is described in
-(Giannakis et al., 2023).
+Giannakis et al. (2023).
 
 ❗ It is *not recommended* to assess selection by fitting a Kimura distribution to
 snapshot heteroplasmy data -- time series data is more appropriate for this 
