@@ -67,7 +67,7 @@ Giannakis et al. (2023).
 
 ❗ It is *not recommended* to assess selection by fitting a Kimura distribution to
 snapshot heteroplasmy data -- time series data is more appropriate for this 
-task. This repository https://github.com/StochasticBiology/heteroplasmy-analysis/
+task. This repository github.com/kostasgian21/heteroplasmy
 contains functions to identify better Kimura fits than method of moments.
 
 
