@@ -6,8 +6,9 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of `kimura` is to fit Kimura distributions to heteroplasmy data
-and test for evidence of selection pressure.
+The goal of `kimura` is to provide functionality related to the Kimura distribution from statistical genetics (Kimura, 1955), often applied to the study of mitochondrial DNA heteroplasmy.
+
+❗ If you are looking to fit a Kimura distribution to a heteroplasmy sample to provide evidence of selection (or neutrality), please read the notes below and Giannakis et al. (2023) ❗
 
 ## Installation
 
@@ -22,27 +23,7 @@ devtools::install_github("lbozhilova/kimura")
 
 ## Example
 
-The principal purpose of this package is to perform hypothesis test for
-the presence of selection pressure in mtDNA heteroplasmy distributions
-(Wonnapinij et al., 2008). This can be done like so:
-
-``` r
-library(kimura)
-
-# Load some heteroplasmy data
-h <- c(0.06, 0.08, 0.27, 0.37, 0.40, 0.45, 0.56, 0.61, 0.75, 0.79)
-
-# Carry out test for selection 
-test_kimura(h)
-#> 
-#>  Monte Carlo Kolmogorov-Smirnov
-#> 
-#> data:  h and Kimura(0.434, 0.7417)
-#> D = 0.12798, p = 0.43400, b = 0.74170, p-value = 0.989
-#> alternative hypothesis: one-sided
-```
-
-There is also some additional functionality for generating data from the
+This package contains functionality for extracting probabilities and generating data from the
 Kimura distribution.
 
 ``` r
@@ -69,6 +50,27 @@ rkimura(10, p, b)
 #>  [8] 0.6312104 0.7449587 0.5605141
 ```
 
+
+This package also contains functionality for fitting a Kimura distribution
+to a heteroplasmy sample using the method of moments. This has in the past
+been used to carry out 
+a Kolmogorov-Smirnov test to assess discrepancy between the sample and 
+the fitted distribution (Wonnapinij et al., 2008). 
+
+❗ However, since Wonnapinij et al. (2008), it has been found that a 
+method-of-moments fit does not provide the best-fitting version of the Kimura
+distribution for a given heteroplasmy sample. Such a fit will often 
+produce a distribution that is a bad fit to the data, and therefore a 
+*false positive signal of selection*, whereas a differently fitted 
+distribution would given no such signal. This issue is described in
+Giannakis et al. (2023).
+
+❗ It is *not recommended* to assess selection by fitting a Kimura distribution to
+snapshot heteroplasmy data -- time series data is more appropriate for this 
+task. This repository github.com/kostasgian21/heteroplasmy
+contains functions to identify better Kimura fits than method of moments.
+
+
 ## References
 
 Wonnapinij, Passorn, Patrick F. Chinnery, and David C. Samuels. “The
@@ -78,6 +80,8 @@ drift.” The American Journal of Human Genetics 83.5 (2008): 582-593.
 Kimura, Motoo. “Solution of a process of random genetic drift with a
 continuous model.” Proceedings of the National Academy of Sciences of
 the United States of America 41.3 (1955): 144.
+
+Giannakis, K., Broz, A.K., Sloan, D.B. and Johnston, I.G., 2023. Avoiding misleading estimates using mtDNA heteroplasmy statistics to study bottleneck size and selection. G3: Genes, Genomes, Genetics, 13(6), p.jkad068.
 
 This package started out as a toy reimplementation of
 [lbozhilova/Kimura-Distribution](https://github.com/lbozhilova/Kimura-Distribution).

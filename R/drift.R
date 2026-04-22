@@ -15,6 +15,9 @@
 #' h <- seq(0.2, 0.5, 0.01)
 #' test_kimura(h)
 test_kimura <- function(h, num_MC = 1000, round = TRUE) {
+  message("WARNING! This method of testing for selection is misleading and has a high false positive risk (see doi.org/10.1093/g3journal/jkad068). You are not guaranteed to get the best-fitting distribution for your data, and a p < 0.05 is therefore not meaningful.")
+  message("Consider fitting by minimising Kolmogorov-Smirnov distance or maximum likelihood: https://github.com/kostasgian21/heteroplasmy")
+
   pars <- estimate_parameters(h)
   p <- unname(pars[1])
   b <- unname(pars[2])
